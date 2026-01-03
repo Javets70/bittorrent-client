@@ -96,4 +96,8 @@ impl BencodeValue {
             }),
         }
     }
+
+    pub fn encode(&self) -> Vec<u8> {
+        crate::bencode::encoder::encode(self)
+    }
 }
