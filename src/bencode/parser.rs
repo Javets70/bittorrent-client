@@ -24,7 +24,7 @@ pub fn parse_value(input: &[u8]) -> Result<(BencodeValue, &[u8]), BencodeError> 
 // are invalid, other than i0e, which of course corresponds to 0.
 pub fn parse_int(input: &[u8]) -> Result<(BencodeValue, &[u8]), BencodeError> {
     if !input.starts_with(b"i") {
-        return Err(BencodeError::InvalidInteger(format!("Missing 'i'")));
+        return Err(BencodeError::InvalidInteger("Missing 'i'".to_string()));
     }
 
     let end = input
@@ -34,6 +34,12 @@ pub fn parse_int(input: &[u8]) -> Result<(BencodeValue, &[u8]), BencodeError> {
 
     let num_str = std::str::from_utf8(&input[1..end])
         .map_err(|_| BencodeError::InvalidInteger("Invalid UTF-8 in number".into()))?;
+
+    if (num_str.starts_with("0") && num_str.len() > 1) || num_str.starts_with("-0") {
+        return Err(BencodeError::InvalidInteger(
+            "Integer starts with 0 or -0".to_string(),
+        ));
+    }
 
     let value = num_str
         .parse::<i64>()

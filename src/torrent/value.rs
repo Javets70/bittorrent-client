@@ -92,12 +92,12 @@ impl TorrentMetaInfo {
         hasher.finalize().into()
     }
 
-    pub fn info_hash_urlencoded(&self) -> String {
-        self.info_hash()
-            .iter()
-            .map(|byte| format!("%{:02X}", byte))
-            .collect()
-    }
+    // pub fn info_hash_urlencoded(&self) -> String {
+    //     self.info_hash()
+    //         .iter()
+    //         .map(|byte| format!("%{:02X}", byte))
+    //         .collect()
+    // }
 
     pub fn total_size(&self) -> usize {
         match &self.info.files_info {
